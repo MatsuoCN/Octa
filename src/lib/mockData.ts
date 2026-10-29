@@ -235,6 +235,16 @@ export const alunos: Aluno[] = [
     graduacoes: [{ modalidadeId: "mod-ritmo", nivel: 1, data: "2026-06-14", avaliadorId: "ins-julia" }],
     observacoes: "",
   },
+  // Aluno só do Meireles: não aparece na lista do Montese. Serve para testar o aviso de
+  // "já existe em outra escola" do cadastro rápido (ALUNOS-03) com o telefone (85) 99321-7788.
+  {
+    id: "alu-17", nome: "Tiago Menezes", dataNascimento: "1995-08-21", genero: "Masculino", cpf: "***.318.402-**",
+    telefone: "(85) 99321-7788", email: "tiago.menezes@email.com", status: "em_dia", verificado: true, alunoDesde: "2024-02-10",
+    escolaIds: ["esc-meireles"], modalidadeIds: ["mod-arte-marcial"], turmaIds: [],
+    contratoAtivoId: null, valorEmAtraso: 0, creditos: 0,
+    graduacoes: [{ modalidadeId: "mod-arte-marcial", nivel: 3, data: "2026-06-14", avaliadorId: "ins-rafael" }],
+    observacoes: "",
+  },
 ];
 
 /* ---------- Contratos ---------- */

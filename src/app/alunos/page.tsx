@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { Suspense, type ReactNode } from "react";
+import { Suspense } from "react";
 import { Send, UserPlus } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { getAlunos, getContratos, getModalidades, getPlanos } from "@/lib/api";
 import { contarAlunosAtivos, montarCatalogos, montarLinhasAlunos } from "@/lib/alunos";
+import { NovoAluno } from "./NovoAluno";
 import { VisaoAlunos } from "./VisaoAlunos";
 
 export const metadata: Metadata = { title: "Alunos" };
@@ -57,41 +58,37 @@ async function ConteudoAlunos() {
 /* ---------- Cabeçalho ---------- */
 
 function AcoesAlunos() {
-  // TODO(ALUNOS-03): ligar os botões ao cadastro rápido.
   return (
     <>
-      <BotaoAcao icone={<Send className="size-4" aria-hidden />} variante="secundario">
+      {/* TODO: convite por link, em tarefa própria. */}
+      <button
+        type="button"
+        disabled
+        title="Em breve"
+        className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-line bg-surface px-4 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        <Send className="size-4" aria-hidden />
         Convidar aluno
-      </BotaoAcao>
-      <BotaoAcao icone={<UserPlus className="size-4" aria-hidden />} variante="principal">
-        Novo aluno
-      </BotaoAcao>
+      </button>
+      <Suspense fallback={<BotaoNovoAlunoCarregando />}>
+        <BotaoNovoAluno />
+      </Suspense>
     </>
   );
 }
 
-const VARIANTES_BOTAO = {
-  principal: "bg-accent text-accent-ink",
-  secundario: "border border-line bg-surface",
-} as const;
-
-interface BotaoAcaoProps {
-  icone: ReactNode;
-  variante: keyof typeof VARIANTES_BOTAO;
-  children: ReactNode;
+/** Busca as modalidades para o formulário e entrega o botão já pronto. */
+async function BotaoNovoAluno() {
+  const modalidades = await getModalidades().catch(() => []);
+  return <NovoAluno modalidades={modalidades.map((m) => ({ valor: m.id, rotulo: m.nome }))} />;
 }
 
-function BotaoAcao({ icone, variante, children }: BotaoAcaoProps) {
+function BotaoNovoAlunoCarregando() {
   return (
-    <button
-      type="button"
-      disabled
-      title="Chega com o cadastro rápido (ALUNOS-03)"
-      className={`inline-flex min-h-11 items-center gap-2 rounded-lg px-4 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-60 ${VARIANTES_BOTAO[variante]}`}
-    >
-      {icone}
-      {children}
-    </button>
+    <span className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-accent px-4 text-sm font-semibold text-accent-ink opacity-60">
+      <UserPlus className="size-4" aria-hidden />
+      Novo aluno
+    </span>
   );
 }
 

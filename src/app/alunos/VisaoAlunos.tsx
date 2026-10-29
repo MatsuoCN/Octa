@@ -279,6 +279,7 @@ function ListaModalidades({ modalidades }: { modalidades: ModalidadeResumida[] }
  * tem o seu Suspense, e o resto do card continua saindo pronto do servidor.
  */
 function IdadeComCarregamento({ dataNascimento }: { dataNascimento: string }) {
+  if (!dataNascimento) return <span>idade não informada</span>;
   return (
     <Suspense fallback={<span className="inline-block h-3 w-12 animate-pulse rounded bg-line align-middle" />}>
       <Idade dataNascimento={dataNascimento} />

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Suspense, type MouseEvent } from "react";
+import { Suspense, type MouseEvent, type ReactNode } from "react";
 import { LayoutGrid, List, type LucideIcon } from "lucide-react";
 import { Avatar } from "@/components/ui/Avatar";
 import { ChipModalidade } from "@/components/ui/ChipModalidade";
@@ -25,15 +25,21 @@ import { useVisaoAlunos } from "./useVisaoAlunos";
  * (ver preferenciaVisao.ts).
  * ==================================================================== */
 
-export function VisaoAlunos({ alunos }: { alunos: LinhaAluno[] }) {
+interface VisaoAlunosProps {
+  alunos: LinhaAluno[];
+  /** Texto à esquerda do botão grade/lista, ex.: "16 alunos" ou "3 de 16 alunos". */
+  resumo: ReactNode;
+}
+
+export function VisaoAlunos({ alunos, resumo }: VisaoAlunosProps) {
   const [visao, trocarVisao] = useVisaoAlunos();
 
   return (
     <>
       <ScriptInline codigo={scriptAplicarVisao()} />
 
-      <div className="mt-6 flex items-center justify-between gap-3">
-        <p className="text-sm text-muted">{pluralizar(alunos.length, "aluno", "alunos")}</p>
+      <div className="flex items-center justify-between gap-3">
+        <p className="text-sm text-muted">{resumo}</p>
         <AlternarVisao visao={visao} onTrocar={trocarVisao} />
       </div>
 

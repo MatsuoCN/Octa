@@ -235,6 +235,15 @@ export const alunos: Aluno[] = [
     graduacoes: [{ modalidadeId: "mod-ritmo", nivel: 1, data: "2026-06-14", avaliadorId: "ins-julia" }],
     observacoes: "",
   },
+  // Nome com acento para o teste da busca (ALUNOS-02): digitar "jose" encontra "José".
+  {
+    id: "alu-18", nome: "José Ricardo Nunes", dataNascimento: "1987-04-02", genero: "Masculino", cpf: "***.205.667-**",
+    telefone: "(85) 98877-3015", email: "jose.nunes@email.com", status: "em_dia", verificado: true, alunoDesde: "2025-08-04",
+    escolaIds: ["esc-montese"], modalidadeIds: ["mod-arte-marcial"], turmaIds: ["tur-04"],
+    contratoAtivoId: "ctr-18", valorEmAtraso: 0, creditos: 0,
+    graduacoes: [{ modalidadeId: "mod-arte-marcial", nivel: 2, data: "2026-06-14", avaliadorId: "ins-rafael" }],
+    observacoes: "",
+  },
   // Aluno só do Meireles: não aparece na lista do Montese. Serve para testar o aviso de
   // "já existe em outra escola" do cadastro rápido (ALUNOS-03) com o telefone (85) 99321-7788.
   {
@@ -266,6 +275,7 @@ const basesContrato: BaseContrato[] = [
   ["alu-14", "pln-1mod", 25, "2022-07-25", "cartao_recorrente"],
   ["alu-15", "pln-livre", 15, "2019-10-15", "cartao_recorrente"],
   ["alu-16", "pln-2mod", 10, "2026-01-10", "cartao_recorrente"],
+  ["alu-18", "pln-1mod", 5, "2025-08-04", "pix"],
 ];
 
 function anoMais(dataIso: string, anos: number): string {

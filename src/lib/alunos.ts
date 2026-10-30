@@ -10,11 +10,14 @@ export interface LinhaAluno {
   nome: string;
   dataNascimento: string;
   telefone: string;
+  /** Como veio do cadastro (pode estar mascarado). Usado só na busca. */
+  cpf: string | null;
   status: StatusAluno;
   verificado: boolean;
   alunoDesde: string;
   valorEmAtraso: number;
   modalidades: ModalidadeResumida[];
+  turmaIds: string[];
   planoNome: string | null;
   diaVencimento: number | null;
 }
@@ -78,11 +81,13 @@ export function montarLinhaAluno(aluno: Aluno, catalogos: Catalogos): LinhaAluno
     nome: aluno.nome,
     dataNascimento: aluno.dataNascimento,
     telefone: aluno.telefone,
+    cpf: aluno.cpf,
     status: aluno.status,
     verificado: aluno.verificado,
     alunoDesde: aluno.alunoDesde,
     valorEmAtraso: aluno.valorEmAtraso,
     modalidades: resolverModalidades(aluno.modalidadeIds, catalogos.modalidades),
+    turmaIds: aluno.turmaIds,
     planoNome: plano?.nome ?? null,
     diaVencimento: contrato?.diaVencimento ?? null,
   };

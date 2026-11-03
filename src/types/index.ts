@@ -116,6 +116,20 @@ export interface Aluno {
   responsavel?: { nome: string; telefone: string };
 }
 
+/** Dados do cadastro rápido (ALUNOS-03). Só nome e telefone são obrigatórios. */
+export interface NovoAluno {
+  nome: string;
+  telefone: string;
+  /** AAAA-MM-DD ou vazio, quando não informado. */
+  dataNascimento: string;
+  /** Modalidade de interesse, ou vazio. */
+  modalidadeId: string;
+  /** Só números, ou vazio. */
+  cpf: string;
+  /** Obrigatório para menores de 18 anos. */
+  responsavel?: { nome: string; telefone: string };
+}
+
 /* ---------- Acordo ---------- */
 
 export type StatusContrato = "ativo" | "trancado" | "encerrado";

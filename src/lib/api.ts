@@ -26,6 +26,7 @@ import type {
   Itinerancia,
   Lead,
   Modalidade,
+  NovoAluno,
   Parcela,
   Plano,
   PublicacaoFeed,
@@ -174,6 +175,9 @@ export const getEscolaAtual = () =>
 
 export const getEscolas = () => resolver<Escola[]>({ endpoint: "/escolas", mock: mock.escolas });
 
+export const getEscola = (id: string) =>
+  resolver<Escola>({ endpoint: `/escolas/${id}`, mock: () => porId(mock.escolas, id, "escolas") });
+
 export const getUsuarioAtual = () =>
   resolver<Usuario>({
     endpoint: "/usuarios/me",
@@ -206,6 +210,7 @@ export interface FiltroAlunos {
   busca?: string;
 }
 
+/** Alunos da escola atual. O cadastro é único na federação; cada escola vê só os vinculados a ela. */
 export const getAlunos = (filtro: FiltroAlunos = {}) =>
   resolver<Aluno[]>({
     endpoint: "/alunos",
@@ -215,6 +220,7 @@ export const getAlunos = (filtro: FiltroAlunos = {}) =>
       const digitos = filtro.busca?.replace(/\D/g, "") ?? "";
       return mock.alunos.filter(
         (a) =>
+          a.escolaIds.includes(mock.escolaAtualId) &&
           (!filtro.status || a.status === filtro.status) &&
           (!filtro.modalidadeId || a.modalidadeIds.includes(filtro.modalidadeId)) &&
           (!filtro.turmaId || a.turmaIds.includes(filtro.turmaId)) &&
@@ -227,6 +233,88 @@ export const getAlunos = (filtro: FiltroAlunos = {}) =>
 
 export const getAluno = (id: string) =>
   resolver<Aluno>({ endpoint: `/alunos/${id}`, mock: () => porId(mock.alunos, id, "alunos") });
+
+/* ---------- Gravações de aluno (no mock, alteram os dados em memória) ---------- */
+
+const soDigitos = (texto: string) => texto.replace(/\D/g, "");
+
+/**
+ * Procura, em toda a federação, um aluno com o mesmo telefone ou CPF.
+ * Devolve null quando não há ninguém. CPFs mascarados no mock ("***.482.113-**") não entram na comparação.
+ */
+export const buscarAlunoNaFederacao = (busca: { telefone: string; cpf: string }) =>
+  resolver<Aluno | null>({
+    endpoint: "/alunos/duplicado",
+    params: { telefone: soDigitos(busca.telefone), cpf: soDigitos(busca.cpf) },
+    mock: () => {
+      const telefone = soDigitos(busca.telefone);
+      const cpf = soDigitos(busca.cpf);
+      return (
+        mock.alunos.find(
+          (a) =>
+            (telefone.length >= 10 && soDigitos(a.telefone) === telefone) ||
+            (cpf.length === 11 && a.cpf !== null && soDigitos(a.cpf) === cpf),
+        ) ?? null
+      );
+    },
+  });
+
+/** Cria o aluno já vinculado à escola atual, sem contrato. */
+export const criarAluno = (dados: NovoAluno) =>
+  resolver<Aluno>({
+    endpoint: "/alunos",
+    method: "POST",
+    body: dados,
+    mock: () => {
+      const aluno: Aluno = {
+        id: `alu-${Date.now().toString(36)}`,
+        nome: dados.nome,
+        dataNascimento: dados.dataNascimento,
+        genero: "Não declarado",
+        cpf: dados.cpf || null,
+        telefone: dados.telefone,
+        email: null,
+        status: "inativo",
+        verificado: false,
+        alunoDesde: new Date().toISOString().slice(0, 10),
+        escolaIds: [mock.escolaAtualId],
+        modalidadeIds: dados.modalidadeId ? [dados.modalidadeId] : [],
+        turmaIds: [],
+        contratoAtivoId: null,
+        valorEmAtraso: 0,
+        creditos: 0,
+        graduacoes: [],
+        observacoes: "",
+        ...(dados.responsavel ? { responsavel: dados.responsavel } : {}),
+      };
+      mock.alunos.push(aluno);
+      return aluno;
+    },
+  });
+
+/** Vincula um aluno que já existe na federação à escola atual. */
+export const vincularAlunoAEscolaAtual = (alunoId: string) =>
+  resolver<Aluno>({
+    endpoint: `/alunos/${alunoId}/vinculos`,
+    method: "POST",
+    mock: () => {
+      const aluno = porId(mock.alunos, alunoId, "alunos");
+      if (!aluno.escolaIds.includes(mock.escolaAtualId)) aluno.escolaIds.push(mock.escolaAtualId);
+      return aluno;
+    },
+  });
+
+/** Coloca o aluno em aula experimental. */
+export const marcarAulaExperimental = (alunoId: string) =>
+  resolver<Aluno>({
+    endpoint: `/alunos/${alunoId}/experimental`,
+    method: "POST",
+    mock: () => {
+      const aluno = porId(mock.alunos, alunoId, "alunos");
+      aluno.status = "experimental";
+      return aluno;
+    },
+  });
 
 /* ======================================================================
  * Turmas

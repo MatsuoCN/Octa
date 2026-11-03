@@ -26,7 +26,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="pt-BR" className={`${figtree.variable} ${bricolage.variable} h-full antialiased`}>
       <body className="min-h-full font-sans">
-        <div className="md:grid md:min-h-screen md:grid-cols-[240px_minmax(0,1fr)]">
+        <div className="casca-app md:grid md:min-h-screen md:grid-cols-[240px_minmax(0,1fr)]">
           <Sidebar
             fonteDados={FONTE_PADRAO}
             escola={

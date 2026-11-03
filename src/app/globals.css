@@ -88,6 +88,19 @@ html:not([data-visao-alunos="lista"]) [data-so-visao="lista"] {
   display: none;
 }
 
+/*
+ * Páginas de tela cheia (ex.: /login) marcam o conteúdo com data-tela-cheia:
+ * a sidebar e a barra do celular somem e o conteúdo ocupa a largura toda.
+ * O Next 16 guarda a página anterior escondida (style="display: none") para o voltar
+ * ser instantâneo; por isso a regra só vale quando a página marcada está visível.
+ */
+body:has([data-tela-cheia]:not([hidden]):not([style*="display: none"])) .casca-app {
+  display: block;
+}
+body:has([data-tela-cheia]:not([hidden]):not([style*="display: none"])) .casca-lateral {
+  display: none !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

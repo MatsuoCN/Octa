@@ -7,6 +7,7 @@ import {
   CalendarDays,
   Database,
   House,
+  LogOut,
   LayoutGrid,
   Menu,
   Server,
@@ -18,6 +19,7 @@ import {
 } from "lucide-react";
 import type { FonteDados } from "@/lib/api";
 import { OctaMark } from "@/components/OctaMark";
+import { sair } from "@/app/login/actions";
 
 interface ItemMenu {
   href: string;
@@ -52,7 +54,7 @@ export function Sidebar({ escola, fonteDados }: SidebarProps) {
   return (
     <>
       {/* Barra superior no celular */}
-      <header className="sticky top-0 z-30 flex items-center gap-3 bg-side px-4 py-3 text-side-ink md:hidden">
+      <header className="casca-lateral sticky top-0 z-30 flex items-center gap-3 bg-side px-4 py-3 text-side-ink md:hidden">
         <button
           type="button"
           onClick={() => setAberta(true)}
@@ -69,13 +71,13 @@ export function Sidebar({ escola, fonteDados }: SidebarProps) {
 
       {/* Fundo escuro do menu aberto no celular */}
       {aberta && (
-        <div className="fixed inset-0 z-40 bg-black/50 md:hidden" onClick={fechar} aria-hidden="true" />
+        <div className="casca-lateral fixed inset-0 z-40 bg-black/50 md:hidden" onClick={fechar} aria-hidden="true" />
       )}
 
       <aside
         id="sidebar"
         aria-label="Menu principal"
-        className={`fixed inset-y-0 left-0 z-50 flex w-[260px] flex-col gap-5 overflow-y-auto bg-side px-3 py-5 text-side-ink transition-transform md:sticky md:top-0 md:z-auto md:h-screen md:w-auto md:translate-x-0 ${
+        className={`casca-lateral fixed inset-y-0 left-0 z-50 flex w-[260px] flex-col gap-5 overflow-y-auto bg-side px-3 py-5 text-side-ink transition-transform md:sticky md:top-0 md:z-auto md:h-screen md:w-auto md:translate-x-0 ${
           aberta ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -108,6 +110,16 @@ export function Sidebar({ escola, fonteDados }: SidebarProps) {
             <MenusComRota onNavegar={fechar} />
           </Suspense>
         </nav>
+
+        <form action={sair}>
+          <button
+            type="submit"
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-[0.93rem] text-side-ink/80 transition-colors hover:bg-side-hover hover:text-side-ink"
+          >
+            <LogOut className="size-[18px] shrink-0" aria-hidden />
+            Sair
+          </button>
+        </form>
 
         <div
           className="flex items-center gap-2 px-3 text-xs text-side-muted"

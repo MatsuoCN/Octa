@@ -22,6 +22,7 @@ import type {
   Parcela,
   Plano,
   PublicacaoFeed,
+  RegistroChamada,
   Turma,
   Usuario,
 } from "@/types";
@@ -102,6 +103,15 @@ export const turmas: Turma[] = [
   { id: "tur-20", modalidadeId: "mod-arte-marcial", diaSemana: 5, horario: "09:00", duracaoMinutos: 90, capacidade: 30, ocupacao: 26, instrutorId: "ins-rafael", sala: "Tatame 1" },
   { id: "tur-21", modalidadeId: "mod-acrobacia", diaSemana: 5, horario: "10:30", duracaoMinutos: 60, capacidade: 14, ocupacao: 9, instrutorId: "ins-julia", sala: "Tatame 1" },
 ];
+
+/* ---------- Chamadas ---------- */
+
+/**
+ * Chamadas salvas. Começa vazio: a api.ts cria chamadas de exemplo para as aulas
+ * da manhã na primeira vez que uma data é consultada (ver getChamadasDoDia), e a
+ * tela de chamada (TURMAS-05) acrescenta aqui enquanto o servidor estiver rodando.
+ */
+export const chamadas: RegistroChamada[] = [];
 
 /* ---------- Alunos ---------- */
 

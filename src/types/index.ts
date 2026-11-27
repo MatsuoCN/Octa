@@ -81,6 +81,20 @@ export interface Turma {
   sala: string;
 }
 
+/**
+ * Resumo de uma chamada salva: uma aula de uma turma numa data.
+ * A tela de chamada (TURMAS-05) grava; o Início e os relatórios leem.
+ */
+export interface RegistroChamada {
+  id: Id;
+  turmaId: Id;
+  /** AAAA-MM-DD */
+  data: string;
+  /** Quem deu a aula. Diferente do instrutor da turma quando houve substituição. */
+  instrutorId: Id;
+  presentes: number;
+}
+
 /* ---------- Pessoas ---------- */
 
 export type StatusAluno = "em_dia" | "atraso" | "experimental" | "trancado" | "inativo";

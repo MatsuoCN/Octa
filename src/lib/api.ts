@@ -13,6 +13,7 @@
  * passando `fonte: "api"` na chamada, sem mudar a variável global.
  */
 import * as mock from "@/lib/mockData";
+import { diaDaSemanaDaData } from "@/lib/horarioEscola";
 import type {
   Aluno,
   AulasPorInstrutor,
@@ -30,6 +31,7 @@ import type {
   Parcela,
   Plano,
   PublicacaoFeed,
+  RegistroChamada,
   SituacaoParcela,
   StatusAluno,
   Turma,
@@ -343,6 +345,62 @@ export const getTurmas = (filtro: FiltroTurmas = {}) =>
 
 export const getTurma = (id: string) =>
   resolver<Turma>({ endpoint: `/turmas/${id}`, mock: () => porId(mock.turmas, id, "turmas") });
+
+/* ======================================================================
+ * Chamadas
+ * ==================================================================== */
+
+/** Datas que já ganharam chamadas de exemplo no mock. */
+const datasComExemplo = new Set<string>();
+
+/**
+ * Só no mock: na primeira consulta de uma data, cria chamadas para as aulas da manhã
+ * (antes do meio-dia), com cerca de 70% de presença, como se a escola já tivesse feito.
+ * Serve para o Início mostrar aulas feitas e por fazer enquanto a TURMAS-05 não existe.
+ */
+function criarChamadasDeExemplo(data: string) {
+  if (datasComExemplo.has(data)) return;
+  datasComExemplo.add(data);
+
+  const dia = diaDaSemanaDaData(data);
+  for (const turma of mock.turmas) {
+    if (turma.diaSemana !== dia || turma.horario >= "12:00") continue;
+    if (mock.chamadas.some((c) => c.turmaId === turma.id && c.data === data)) continue;
+    mock.chamadas.push({
+      id: `cha-${data}-${turma.id}`,
+      turmaId: turma.id,
+      data,
+      instrutorId: turma.instrutorId,
+      presentes: Math.max(1, Math.round(turma.ocupacao * 0.7)),
+    });
+  }
+}
+
+/** Chamadas salvas numa data (AAAA-MM-DD). */
+export const getChamadasDoDia = (data: string) =>
+  resolver<RegistroChamada[]>({
+    endpoint: "/chamadas",
+    params: { data },
+    mock: () => {
+      criarChamadasDeExemplo(data);
+      return mock.chamadas.filter((c) => c.data === data);
+    },
+  });
+
+/** Salva (ou corrige) a chamada de uma turma numa data. Usada pela tela de chamada (TURMAS-05). */
+export const salvarChamada = (registro: Omit<RegistroChamada, "id">) =>
+  resolver<RegistroChamada>({
+    endpoint: "/chamadas",
+    method: "POST",
+    body: registro,
+    mock: () => {
+      const existente = mock.chamadas.find((c) => c.turmaId === registro.turmaId && c.data === registro.data);
+      if (existente) return Object.assign(existente, registro);
+      const nova = { id: `cha-${registro.data}-${registro.turmaId}`, ...registro };
+      mock.chamadas.push(nova);
+      return nova;
+    },
+  });
 
 /* ======================================================================
  * Contratos

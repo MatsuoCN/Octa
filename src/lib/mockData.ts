@@ -111,7 +111,14 @@ export const alunos: Aluno[] = [
     telefone: "(85) 98812-4471", email: "ana.b@email.com", status: "em_dia", verificado: true, alunoDesde: "2023-03-25",
     escolaIds: ["esc-montese"], modalidadeIds: ["mod-arte-marcial", "mod-armas-de-corte"], turmaIds: ["tur-15", "tur-07"],
     contratoAtivoId: "ctr-01", valorEmAtraso: 0, creditos: 40,
-    graduacoes: [{ modalidadeId: "mod-arte-marcial", nivel: 4, data: "2026-06-14", avaliadorId: "ins-henrique" }],
+    // Histórico com mais de um nível, para a linha do tempo da aba Graduações (ALUNOS-13).
+    graduacoes: [
+      { modalidadeId: "mod-arte-marcial", nivel: 1, data: "2023-12-09", avaliadorId: "ins-rafael" },
+      { modalidadeId: "mod-arte-marcial", nivel: 2, data: "2024-06-15", avaliadorId: "ins-rafael" },
+      { modalidadeId: "mod-arte-marcial", nivel: 3, data: "2025-06-14", avaliadorId: "ins-henrique" },
+      { modalidadeId: "mod-arte-marcial", nivel: 4, data: "2026-06-14", avaliadorId: "ins-henrique" },
+      { modalidadeId: "mod-armas-de-corte", nivel: 1, data: "2025-12-10", avaliadorId: null },
+    ],
     observacoes: "Prefere contato por WhatsApp à noite. Interesse em Arqueria a partir de 2027.",
   },
   {
@@ -176,7 +183,11 @@ export const alunos: Aluno[] = [
     telefone: "(85) 98990-4411", email: "isabela.furtado@email.com", status: "em_dia", verificado: true, alunoDesde: "2020-09-05",
     escolaIds: ["esc-montese"], modalidadeIds: ["mod-tai-chi", "mod-chi"], turmaIds: ["tur-10", "tur-13"],
     contratoAtivoId: "ctr-09", valorEmAtraso: 0, creditos: 0,
-    graduacoes: [{ modalidadeId: "mod-tai-chi", nivel: 7, data: "2026-06-14", avaliadorId: "ins-henrique" }],
+    graduacoes: [
+      { modalidadeId: "mod-tai-chi", nivel: 5, data: "2024-12-07", avaliadorId: "ins-henrique" },
+      { modalidadeId: "mod-tai-chi", nivel: 6, data: "2025-06-14", avaliadorId: "ins-henrique" },
+      { modalidadeId: "mod-tai-chi", nivel: 7, data: "2026-06-14", avaliadorId: "ins-henrique" },
+    ],
     observacoes: "",
   },
   {
@@ -201,7 +212,12 @@ export const alunos: Aluno[] = [
     telefone: "(85) 98221-9013", email: "marcos.dias@email.com", status: "atraso", verificado: true, alunoDesde: "2023-02-01",
     escolaIds: ["esc-montese"], modalidadeIds: ["mod-armas-de-corte", "mod-arte-marcial"], turmaIds: ["tur-07", "tur-15"],
     contratoAtivoId: "ctr-12", valorEmAtraso: 320, creditos: 0,
-    graduacoes: [{ modalidadeId: "mod-armas-de-corte", nivel: 3, data: "2025-12-10", avaliadorId: "ins-henrique" }],
+    graduacoes: [
+      { modalidadeId: "mod-armas-de-corte", nivel: 1, data: "2023-12-09", avaliadorId: "ins-rafael" },
+      { modalidadeId: "mod-armas-de-corte", nivel: 2, data: "2024-12-07", avaliadorId: "ins-henrique" },
+      { modalidadeId: "mod-armas-de-corte", nivel: 3, data: "2025-12-10", avaliadorId: "ins-henrique" },
+      { modalidadeId: "mod-arte-marcial", nivel: 1, data: "2024-06-15", avaliadorId: "ins-rafael" },
+    ],
     observacoes: "",
   },
   {
@@ -224,7 +240,12 @@ export const alunos: Aluno[] = [
     telefone: "(85) 98313-0026", email: "paula.sousa@email.com", status: "em_dia", verificado: true, alunoDesde: "2019-10-15",
     escolaIds: ["esc-montese"], modalidadeIds: ["mod-arte-marcial", "mod-arqueria"], turmaIds: ["tur-15", "tur-06"],
     contratoAtivoId: "ctr-15", valorEmAtraso: 0, creditos: 0,
-    graduacoes: [{ modalidadeId: "mod-arte-marcial", nivel: 8, data: "2026-06-14", avaliadorId: "ins-henrique" }],
+    graduacoes: [
+      { modalidadeId: "mod-arte-marcial", nivel: 6, data: "2024-06-15", avaliadorId: "ins-henrique" },
+      { modalidadeId: "mod-arte-marcial", nivel: 7, data: "2025-06-14", avaliadorId: "ins-henrique" },
+      { modalidadeId: "mod-arte-marcial", nivel: 8, data: "2026-06-14", avaliadorId: "ins-henrique" },
+      { modalidadeId: "mod-arqueria", nivel: 2, data: "2025-12-10", avaliadorId: "ins-caio" },
+    ],
     observacoes: "Auxilia nas aulas infantis de sábado.",
   },
   {

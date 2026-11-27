@@ -20,6 +20,7 @@ import type {
   Contrato,
   DiaSemana,
   Escola,
+  Graduacao,
   EtapaFunil,
   IndicadoresInicio,
   Instrutor,
@@ -312,6 +313,22 @@ export const marcarAulaExperimental = (alunoId: string) =>
     mock: () => {
       const aluno = porId(mock.alunos, alunoId, "alunos");
       aluno.status = "experimental";
+      return aluno;
+    },
+  });
+
+/**
+ * Registra uma graduação no histórico do aluno (ALUNOS-13). Devolve o aluno atualizado.
+ * Quem confere a regra do nível menor que o atual é a tela/ação, antes de chamar aqui.
+ */
+export const registrarGraduacao = (alunoId: string, graduacao: Graduacao) =>
+  resolver<Aluno>({
+    endpoint: `/alunos/${alunoId}/graduacoes`,
+    method: "POST",
+    body: graduacao,
+    mock: () => {
+      const aluno = porId(mock.alunos, alunoId, "alunos");
+      aluno.graduacoes.push({ ...graduacao });
       return aluno;
     },
   });

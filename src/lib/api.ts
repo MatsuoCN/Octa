@@ -473,8 +473,25 @@ export const getLeads = (etapa?: EtapaFunil) =>
  * Início, feed e itinerâncias
  * ==================================================================== */
 
-export const getIndicadoresInicio = () =>
-  resolver<IndicadoresInicio>({ endpoint: "/inicio/indicadores", mock: mock.indicadoresInicio });
+/**
+ * Indicadores do Início (INICIO-02) para uma data (AAAA-MM-DD, no fuso da escola).
+ * No mock, a presença de hoje sai das chamadas da data e dos matriculados nas turmas do dia,
+ * para bater com o bloco "Aulas de hoje"; o resto vem fixo do mockData.
+ */
+export const getIndicadoresInicio = (data: string) =>
+  resolver<IndicadoresInicio>({
+    endpoint: "/inicio/indicadores",
+    params: { data },
+    mock: () => {
+      criarChamadasDeExemplo(data);
+      const dia = diaDaSemanaDaData(data);
+      return {
+        ...mock.indicadoresInicio,
+        presencaHoje: mock.chamadas.filter((c) => c.data === data).reduce((soma, c) => soma + c.presentes, 0),
+        capacidadeHoje: mock.turmas.filter((t) => t.diaSemana === dia).reduce((soma, t) => soma + t.ocupacao, 0),
+      };
+    },
+  });
 
 export const getFeed = () =>
   resolver<PublicacaoFeed[]>({

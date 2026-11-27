@@ -279,7 +279,9 @@ export interface IndicadoresInicio {
   matriculasAtivas: number;
   novasMatriculasMes: number;
   trancadas: number;
+  /** Presentes nas chamadas já feitas hoje. */
   presencaHoje: number;
+  /** Matriculados em todas as aulas de hoje (quantos poderiam vir). */
   capacidadeHoje: number;
   recebidoMes: number;
   previstoMes: number;

@@ -59,3 +59,15 @@ export function horariosDeMudanca(aulas: AulaDoDia[]): string[] {
   }
   return [...horarios].sort();
 }
+
+/**
+ * Financeiro › Parcelas já filtrado por atrasadas. Usado por "Em atraso" e "Ver todos".
+ * TODO(FINANCEIRO-03): a tela de parcelas lê o filtro `situacao` do endereço.
+ */
+export const CAMINHO_PARCELAS_ATRASADAS = "/financeiro?situacao=atrasada";
+
+/** Percentual de 0 a 100 de `parte` sobre `total` (0 quando o total é zero). */
+export function percentual(parte: number, total: number): number {
+  if (total <= 0) return 0;
+  return Math.min(100, Math.round((parte / total) * 100));
+}
